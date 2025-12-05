@@ -8,12 +8,7 @@ import {
   IonToolbar,
   LoadingController,
   IonImg,
-  IonCol,
-  IonText,
-  IonRow,
   IonCard,
-  IonCardContent,
-  IonGrid,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   InfiniteScrollCustomEvent,
@@ -35,12 +30,7 @@ import { Router } from "@angular/router";
     CommonModule,
     FormsModule,
     IonImg,
-    IonCol,
-    IonText,
-    IonRow,
     IonCard,
-    IonCardContent,
-    IonGrid,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
   ],
@@ -66,12 +56,12 @@ export class ListPokemonsPage {
   async getMorePokemons(event?: InfiniteScrollCustomEvent) {
     const promisePokemons = this.pokemonService.getPokemons();
     if (promisePokemons) {
-      let loading: any;
+      let loading: any = null;
       if (!event) {
         loading = await this.loadingCtroller.create({
           message: "Cargando....",
         });
-        loading.present();
+        await loading.present();
       }
       promisePokemons
         .then((pokemons: IPokemon[]) => {
@@ -79,7 +69,12 @@ export class ListPokemonsPage {
         })
         .catch((error) => console.log(error))
         .finally(() => {
-          loading.dismiss();
+          if (loading) {
+            loading.dismiss();
+          }
+          if (event) {
+            event.target.complete();
+          }
         });
     }
   }

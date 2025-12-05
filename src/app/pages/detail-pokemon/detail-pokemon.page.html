@@ -1,114 +1,94 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>detail-pokemon</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">
+      <strong>Details</strong>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   @if(pokemon){
-  <ion-img [src]="pokemon.sprite" />
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title class="ion-text-capitalize"
-        >{{pokemon.name}}</ion-card-title
+  <div class="header-section" [class]="'bg-' + pokemon.type1">
+    <div class="pokemon-id">#{{pokemon.id}}</div>
+    <ion-img [src]="pokemon.sprite" class="pokemon-sprite-large" />
+    <h1 class="pokemon-name">{{pokemon.name}}</h1>
+    <div class="type-badges">
+      <span [class]="'type-badge type-' + pokemon.type1"
+        >{{pokemon.type1}}</span
       >
-    </ion-card-header>
-    <ion-card-content>
-      <ion-grid>
-        <ion-row class="ion-align-items-center">
-          <ion-col>
-            <ion-text>Tipo</ion-text>
-          </ion-col>
-          <ion-col>
-            <ion-img
-              class="ion-padding-start ion-padding-end"
-              [src]="'assets/img/' + pokemon.type1 + '.gif'"
-            />
-          </ion-col>
-          <ion-col>
-            @if(pokemon.type2){
-            <ion-img
-              class="ion-padding-start ion-padding-end"
-              [src]="'assets/img/' + pokemon.type2 + '.gif'"
-            />}
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-text>Peso</ion-text>
-          </ion-col>
-          <ion-col>
-            <ion-text>{{pokemon.weight}}</ion-text>
-          </ion-col>
-          <ion-col>
-            <ion-text>Altura</ion-text>
-          </ion-col>
-          <ion-col>
-            <ion-text>{{pokemon.height}}</ion-text>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
+      @if(pokemon.type2){
+      <span [class]="'type-badge type-' + pokemon.type2"
+        >{{pokemon.type2}}</span
+      >
+      }
+    </div>
+  </div>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Habilidades</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-row>
-        <ion-col size="5">
-          <ion-text>Principales</ion-text>
-        </ion-col>
-        <ion-col size="7" class="ion-text-end">
+  <div class="content-section">
+    <!-- Info básica -->
+    <ion-card class="info-card">
+      <ion-card-content>
+        <ion-grid class="ion-no-padding">
+          <ion-row class="info-row">
+            <ion-col size="6" class="ion-text-center">
+              <div class="info-label">Weight</div>
+              <div class="info-value">{{pokemon.weight}} kg</div>
+            </ion-col>
+            <ion-col size="6" class="ion-text-center">
+              <div class="info-label">Height</div>
+              <div class="info-value">{{pokemon.height}} m</div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Habilidades -->
+    <ion-card class="abilities-card">
+      <ion-card-header>
+        <ion-card-title>Abilities</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="abilities-list">
           @for(ability of pokemon.abilities; track ability){
-          <ion-text>{{ability}}</ion-text>
+          <span class="ability-badge">{{ability}}</span>
+          } @if(pokemon.hiddenAbility){
+          <span class="ability-badge hidden"
+            >{{pokemon.hiddenAbility}} (Hidden)</span
+          >
           }
-        </ion-col>
-      </ion-row>
-      @if(pokemon.hiddenAbility){
-      <ion-row>
-        <ion-col>
-          <ion-text>Ocultas</ion-text>
-        </ion-col>
-        <ion-col size="7" class="ion-text-end">
-          <ion-text>{{pokemon.hiddenAbility}}</ion-text>
-        </ion-col>
-      </ion-row>
-      }
-    </ion-card-content>
-  </ion-card>
+        </div>
+      </ion-card-content>
+    </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Estadisticas</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      @for(stat of pokemon.stats; track stat) { @let value =
-      toNumber(stat.base_stat); @let color = value >=60
-      ?'success':value<=30?'danger':'warning';
-      <ion-row>
-        <ion-col size="4">
-          <ion-text>{{stat.name}}</ion-text>
-        </ion-col>
-        <ion-col size="2">
-          <ion-text>{{value}}</ion-text>
-        </ion-col>
-        <ion-col>
-          <ion-progress-bar
-            [value]="value/100"
-            [color]="color"
-          ></ion-progress-bar>
-        </ion-col>
-      </ion-row>
-      }
-    </ion-card-content>
-  </ion-card>
+    <!-- Estadísticas -->
+    <ion-card class="stats-card">
+      <ion-card-header>
+        <ion-card-title>Base Stats</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        @for(stat of pokemon.stats; track stat) { @let value =
+        toNumber(stat.base_stat); @let color = value >= 80 ? 'success' : value
+        >= 60 ? 'primary' : value >= 40 ? 'warning' : 'danger';
+        <div class="stat-row">
+          <div class="stat-name">{{stat.name}}</div>
+          <div class="stat-value">{{value}}</div>
+          <div class="stat-bar-container">
+            <div
+              class="stat-bar"
+              [style.width.%]="value / 2.55"
+              [class]="'stat-bar-' + color"
+            ></div>
+          </div>
+        </div>
+        }
+      </ion-card-content>
+    </ion-card>
+  </div>
   }
-  <ion-fab slot="fixed" vertical="top" horizontal="end">
-    <ion-fab-button (click)="goBack()">
-      <ion-icon name="close-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>

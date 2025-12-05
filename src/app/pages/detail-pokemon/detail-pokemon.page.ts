@@ -6,8 +6,8 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonFab,
-  IonFabButton,
+  IonButton,
+  IonButtons,
   IonIcon,
   IonImg,
   IonCard,
@@ -18,13 +18,12 @@ import {
   IonRow,
   IonCol,
   IonText,
-  IonProgressBar,
 } from "@ionic/angular/standalone";
 import { sPokemon } from "../../services/spokemon";
 import { IPokemon } from "../../interfaces/pokemon";
 import { ActivatedRoute } from "@angular/router";
 import { addIcons } from "ionicons";
-import { closeOutline } from "ionicons/icons";
+import { arrowBackOutline } from "ionicons/icons";
 import { Router } from "@angular/router";
 import { LoadingController } from "@ionic/angular/standalone";
 
@@ -34,7 +33,6 @@ import { LoadingController } from "@ionic/angular/standalone";
   styleUrls: ["./detail-pokemon.page.scss"],
   standalone: true,
   imports: [
-    IonProgressBar,
     IonText,
     IonCol,
     IonRow,
@@ -50,8 +48,8 @@ import { LoadingController } from "@ionic/angular/standalone";
     IonToolbar,
     CommonModule,
     FormsModule,
-    IonFab,
-    IonFabButton,
+    IonButton,
+    IonButtons,
     IonIcon,
   ],
 })
@@ -65,9 +63,7 @@ export class DetailPokemonPage implements OnInit {
   pokemon!: IPokemon;
 
   constructor() {
-    addIcons({
-      closeOutline,
-    });
+    addIcons({ arrowBackOutline });
   }
 
   goBack() {

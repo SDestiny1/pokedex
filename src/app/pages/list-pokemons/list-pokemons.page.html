@@ -1,39 +1,51 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>list-pokemons</ion-title>
+    <ion-title class="ion-text-center">
+      <strong>Pokédex</strong>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-grid>
+  <div class="pokemon-grid">
     @for(pokemon of pokemons; track pokemon){
-    <ion-card (click)="goToPage(pokemon)">
-      <ion-card-content>
-        <ion-row class="ion-align-items-center">
-          <ion-col size="3">
-            <ion-img [src]="pokemon.sprite" />
-          </ion-col>
-          <ion-col size="4">
-            <ion-text class="ion-text-capitalize"> {{pokemon.name}}</ion-text>
-          </ion-col>
-          <ion-col size="2">
-            <ion-img [src]="'assets/img/' + pokemon.type1 + '.gif'" />
-          </ion-col>
+    <ion-card (click)="goToPage(pokemon)" button class="pokemon-card">
+      <div class="card-header" [class]="'bg-' + pokemon.type1">
+        <div class="pokemon-id">#{{pokemon.id}}</div>
+      </div>
+      <div class="card-body">
+        <ion-img [src]="pokemon.sprite" class="pokemon-sprite" />
+        <h3 class="pokemon-name">{{pokemon.name}}</h3>
+        <div class="type-badges">
+          <span [class]="'type-badge type-' + pokemon.type1"
+            >{{pokemon.type1}}</span
+          >
           @if (pokemon.type2) {
-          <ion-col size="2">
-            <ion-img [src]="'assets/img/' + pokemon.type1 + '.gif'" />
-          </ion-col>
+          <span [class]="'type-badge type-' + pokemon.type2"
+            >{{pokemon.type2}}</span
+          >
           }
-        </ion-row>
-      </ion-card-content>
+        </div>
+        <div class="pokemon-stats">
+          <div class="stat">
+            <span class="stat-icon">📏</span>
+            <span class="stat-value">{{pokemon.height}}m</span>
+          </div>
+          <div class="stat">
+            <span class="stat-icon">⚖️</span>
+            <span class="stat-value">{{pokemon.weight}}kg</span>
+          </div>
+        </div>
+      </div>
     </ion-card>
     }
-  </ion-grid>
+  </div>
 
   <ion-infinite-scroll (ionInfinite)="getMorePokemons($event)">
     <ion-infinite-scroll-content
-      loadingText="Cargando..."
-      loadingSpinner="bubbles"
-    />
+      loadingText="Loading more..."
+      loadingSpinner="circular"
+    >
+    </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
