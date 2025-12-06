@@ -1,94 +1,98 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="goBack()">
+      <ion-button (click)="goBack()" class="back-button">
         <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">
-      <strong>Details</strong>
-    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   @if(pokemon){
-  <div class="header-section" [class]="'bg-' + pokemon.type1">
-    <div class="pokemon-id">#{{pokemon.id}}</div>
-    <ion-img [src]="pokemon.sprite" class="pokemon-sprite-large" />
-    <h1 class="pokemon-name">{{pokemon.name}}</h1>
-    <div class="type-badges">
-      <span [class]="'type-badge type-' + pokemon.type1"
-        >{{pokemon.type1}}</span
-      >
-      @if(pokemon.type2){
-      <span [class]="'type-badge type-' + pokemon.type2"
-        >{{pokemon.type2}}</span
-      >
-      }
+  <div class="pokemon-detail-container">
+    <!-- Header con imagen y datos principales -->
+    <div class="header-section" [class]="'bg-' + pokemon.type1">
+      <div class="pokemon-number">#{{pokemon.id}}</div>
+      <div class="sprite-container">
+        <ion-img [src]="pokemon.sprite" class="pokemon-sprite" />
+      </div>
+      <h1 class="pokemon-title">{{pokemon.name}}</h1>
+      <div class="type-container">
+        <span [class]="'type-badge type-' + pokemon.type1"
+          >{{pokemon.type1}}</span
+        >
+        @if(pokemon.type2){
+        <span [class]="'type-badge type-' + pokemon.type2"
+          >{{pokemon.type2}}</span
+        >
+        }
+      </div>
     </div>
-  </div>
 
-  <div class="content-section">
-    <!-- Info básica -->
-    <ion-card class="info-card">
-      <ion-card-content>
-        <ion-grid class="ion-no-padding">
-          <ion-row class="info-row">
-            <ion-col size="6" class="ion-text-center">
-              <div class="info-label">Weight</div>
-              <div class="info-value">{{pokemon.weight}} kg</div>
-            </ion-col>
-            <ion-col size="6" class="ion-text-center">
-              <div class="info-label">Height</div>
-              <div class="info-value">{{pokemon.height}} m</div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Habilidades -->
-    <ion-card class="abilities-card">
-      <ion-card-header>
-        <ion-card-title>Abilities</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <div class="abilities-list">
-          @for(ability of pokemon.abilities; track ability){
-          <span class="ability-badge">{{ability}}</span>
-          } @if(pokemon.hiddenAbility){
-          <span class="ability-badge hidden"
-            >{{pokemon.hiddenAbility}} (Hidden)</span
-          >
-          }
+    <!-- Información compacta -->
+    <div class="info-section">
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-icon">⚖️</div>
+          <div class="info-data">
+            <div class="info-value">{{pokemon.weight}}</div>
+            <div class="info-label">Weight (kg)</div>
+          </div>
         </div>
-      </ion-card-content>
-    </ion-card>
+        <div class="info-item">
+          <div class="info-icon">📏</div>
+          <div class="info-data">
+            <div class="info-value">{{pokemon.height}}</div>
+            <div class="info-label">Height (m)</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Estadísticas -->
-    <ion-card class="stats-card">
-      <ion-card-header>
-        <ion-card-title>Base Stats</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
+    <!-- Stats -->
+    <div class="section">
+      <h2 class="section-title">Base Stats</h2>
+      <div class="stats-container">
         @for(stat of pokemon.stats; track stat) { @let value =
-        toNumber(stat.base_stat); @let color = value >= 80 ? 'success' : value
-        >= 60 ? 'primary' : value >= 40 ? 'warning' : 'danger';
-        <div class="stat-row">
-          <div class="stat-name">{{stat.name}}</div>
-          <div class="stat-value">{{value}}</div>
-          <div class="stat-bar-container">
-            <div
-              class="stat-bar"
-              [style.width.%]="value / 2.55"
-              [class]="'stat-bar-' + color"
-            ></div>
+        toNumber(stat.base_stat); @let color = value >= 80 ? 'excellent' : value
+        >= 60 ? 'good' : value >= 40 ? 'average' : 'poor';
+        <div class="stat-item">
+          <div class="stat-info">
+            <span class="stat-label">{{stat.name}}</span>
+            <span class="stat-number">{{value}}</span>
+          </div>
+          <div class="stat-bar-wrapper">
+            <div class="stat-bar-bg">
+              <div
+                class="stat-bar"
+                [class]="color"
+                [style.width.%]="(value / 255) * 100"
+              ></div>
+            </div>
           </div>
         </div>
         }
-      </ion-card-content>
-    </ion-card>
+      </div>
+    </div>
+
+    <!-- Abilities -->
+    <div class="section">
+      <h2 class="section-title">Abilities</h2>
+      <div class="abilities-grid">
+        @for(ability of pokemon.abilities; track ability){
+        <div class="ability-item">
+          <span class="ability-icon">⚡</span>
+          <span class="ability-name">{{ability}}</span>
+        </div>
+        } @if(pokemon.hiddenAbility){
+        <div class="ability-item hidden">
+          <span class="ability-icon">🌟</span>
+          <span class="ability-name">{{pokemon.hiddenAbility}}</span>
+        </div>
+        }
+      </div>
+    </div>
   </div>
   }
 </ion-content>
